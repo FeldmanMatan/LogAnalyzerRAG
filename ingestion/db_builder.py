@@ -5,22 +5,22 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from ai_service import AIService
-from ingestion.log_processor import load_and_split_log
+from ingestion.log_processor import load_and_split_logs_from_dir
 from langchain_chroma import Chroma
 
-def build_vector_db(file_path, persist_directory='db'):
+def build_vector_db(directory_path='data', persist_directory='chroma_db'):
     """
-    Builds a Chroma vector database from a log file.
+    Builds a Chroma vector database from log files in a directory.
 
     Args:
-        file_path (str): Path to the log file.
+        directory_path (str): Path to the directory containing log files.
         persist_directory (str): Directory to persist the vector database.
     """
-    # Call load_and_split_log to get the chunks
-    chunks = load_and_split_log(file_path)
+    # Call load_and_split_logs_from_dir to get the chunks
+    chunks = load_and_split_logs_from_dir(directory_path)
     
     if not chunks:
-        print("No chunks were generated from the log file.")
+        print("No chunks were generated from the log files.")
         return
 
     # Instantiate AIService and get the embeddings model
@@ -39,12 +39,24 @@ def build_vector_db(file_path, persist_directory='db'):
     print(f"Success! {len(chunks)} vectors stored in '{persist_directory}'.")
 
 if __name__ == '__main__':
-    # Construct absolute path to data/sample.log
+    # Construct absolute path to data directory
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    sample_log_path = os.path.join(base_dir, 'data', 'sample.log')
+    data_dir = os.path.join(base_dir, 'data')
+    persist_dir = os.path.join(base_dir, 'chroma_db')
     
-    if os.path.exists(sample_log_path):
-        # Persist the DB in a 'chroma_db' folder in the project root
-        build_vector_db(sample_log_path, persist_directory=os.path.join(base_dir, 'chroma_db'))
+    if os.path.exists(data_dir):
+        # 5.1 Call build_vector_db
+        build_vector_db(data_dir, persist_directory=persist_dir)
+        
+        # 5.2 Instantiate the DB directly
+        ai = AIService()
+        db = Chroma(persist_directory=persist_dir, embedding_function=ai.get_embeddings())
+        
+        # 5.3 Perform a dummy search
+        results = db.similarity_search('test', k=1)
+        
+        # 5.4 Print the metadata of the first returned document
+        if results:
+            print(f"Metadata of the first returned document: {results[0].metadata}")
     else:
-        print(f"File not found: {sample_log_path}")
+        print(f"Directory not found: {data_dir}")

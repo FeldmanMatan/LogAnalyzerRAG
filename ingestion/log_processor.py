@@ -1,41 +1,58 @@
 import os
+import glob
+from concurrent.futures import ThreadPoolExecutor
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-def load_and_split_log(file_path):
-    """
-    Loads a log file and splits it into chunks using LangChain.
+def process_single_file(file_path):
+    try:
+        # Load the file using TextLoader and split it using RecursiveCharacterTextSplitter
+        loader = TextLoader(file_path, encoding="utf-8")
+        documents = loader.load()
+        
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20)
+        chunks = text_splitter.split_documents(documents)
+        
+        # Get the base filename
+        filename = os.path.basename(file_path)
+        
+        # Iterate through the chunks and update metadata
+        for chunk in chunks:
+            if 'golden' in filename.lower():
+                chunk.metadata.update({'status': 'golden', 'source': filename})
+            else:
+                chunk.metadata.update({'status': 'standard', 'source': filename})
+        
+        return chunks
+    except Exception as e:
+        print(f"Error processing file {file_path}: {e}")
+        return []
 
-    Args:
-        file_path (str): Path to the log file.
-
-    Returns:
-        list: List of split document chunks.
-    """
-    # Load the log file using TextLoader
-    loader = TextLoader(file_path, encoding="utf-8")
-    documents = loader.load()
-
-    # Initialize the splitter with chunk_size=100 and chunk_overlap=20
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=100,
-        chunk_overlap=20
-    )
-
-    # Split the documents into chunks
-    chunks = text_splitter.split_documents(documents)
-    return chunks
+def load_and_split_logs_from_dir(directory_path):
+    # Use glob to find all .log files in the given directory
+    log_files = glob.glob(os.path.join(directory_path, "*.log"))
+    
+    # Use ThreadPoolExecutor to run process_single_file concurrently
+    with ThreadPoolExecutor() as executor:
+        results = executor.map(process_single_file, log_files)
+        
+    # Flatten the list of lists into a single flat list of chunks
+    flat_chunks = []
+    for result in results:
+        flat_chunks.extend(result)
+        
+    return flat_chunks
 
 if __name__ == "__main__":
-    # Construct the absolute path to the sample log file
-    # Assumes structure: project_root/ingestion/log_processor.py and project_root/data/sample.log
+    # Construct the absolute path to the data directory
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    sample_log_path = os.path.join(base_dir, "data", "sample.log")
+    data_dir = os.path.join(base_dir, "data")
 
-    if os.path.exists(sample_log_path):
-        chunks = load_and_split_log(sample_log_path)
-        print(f"Number of chunks created: {len(chunks)}")
+    if os.path.exists(data_dir):
+        chunks = load_and_split_logs_from_dir(data_dir)
+        print(f"Total number of chunks created: {len(chunks)}")
         if chunks:
-            print(f"Text of the first chunk:\n{chunks[0].page_content}")
+            print(f"Metadata of the first chunk: {chunks[0].metadata}")
+            print(f"Metadata of the last chunk: {chunks[-1].metadata}")
     else:
-        print(f"File not found: {sample_log_path}")
+        print(f"Directory not found: {data_dir}")
