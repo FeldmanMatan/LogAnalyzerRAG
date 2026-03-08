@@ -1,5 +1,6 @@
 import sys
 import os
+import sqlite3
 
 # Setup the path to ensure imports work correctly from the root directory
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -7,7 +8,9 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ai_service import AIService
 from retrieval.retriever import get_standard_logs, get_golden_logs
 from langchain_core.tools import tool
-from langchain.agents import create_agent
+from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.prebuilt import create_react_agent
+from ingestion.teaching_engine import teach_single
 
 @tool
 def search_standard_logs(query: str) -> str:
@@ -40,11 +43,16 @@ def main():
     # Create the tools list
     tools = [search_standard_logs, search_golden_logs]
 
-    # Create the agent executor
-    agent_executor = create_agent(llm, tools)
+    # Create SQLite connection
+    conn = sqlite3.connect('memory.db', check_same_thread=False)
+    # Initialize checkpointer
+    memory = SqliteSaver(conn)
 
-    # Initialize chat history with system prompt
-    chat_history = [("system", "You are a Senior DevOps AI Assistant. You have tools to search standard and golden logs. Always compare them when asked to find anomalies.")]
+    # Create agent
+    agent_executor = create_react_agent(llm, tools, checkpointer=memory)
+
+    # Define the config dict
+    config = {'configurable': {'thread_id': 'session_1'}}
 
     print('\n🚀 Welcome to the LogAnalyzer AI. Type "exit" to quit.')
 
@@ -57,17 +65,36 @@ def main():
         if user_input.lower() in ['exit', 'quit']:
             break
 
-        chat_history.append(("user", user_input))
+        if user_input.strip().lower() == 'teach':
+            try:
+                file_path = input("📂 Enter log file path: ")
+                start = int(input("🔢 Enter start line: "))
+                end = int(input("🔢 Enter end line: "))
+                status = input("🏷️ Enter status (golden/anomaly): ")
+                explanation = input("🧠 Enter your human explanation: ")
+
+                result = teach_single(file_path, start, end, status, explanation)
+                print(f"\n{result}")
+            except ValueError:
+                print("\nError: Please enter valid numbers for start/end lines.")
+            
+            continue
+
+        # Check if it's a new conversation by getting the state
+        current_state = agent_executor.get_state(config)
+
+        if not current_state.values.get('messages'):
+            messages_payload = [("system", "You are a Senior DevOps AI Assistant. You have tools to search standard and golden logs. Always compare them when asked to find anomalies."), ("user", user_input)]
+        else:
+            messages_payload = [("user", user_input)]
 
         # Call agent
-        response = agent_executor.invoke({"messages": chat_history})
+        response = agent_executor.invoke({"messages": messages_payload}, config=config)
 
         raw_content = response["messages"][-1].content
         clean_text = extract_clean_text(raw_content)
 
         print(f'\n🤖 DevOps AI:\n{clean_text}')
-
-        chat_history.append(("assistant", clean_text))
 
 if __name__ == "__main__":
     main()

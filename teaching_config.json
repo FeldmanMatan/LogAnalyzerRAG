@@ -1,0 +1,16 @@
+[
+  {
+    "file_path": "data/sample_app.log",
+    "start_line": 10,
+    "end_line": 50,
+    "status": "golden",
+    "explanation": "Normal database connection and authentication flow. Memory remains stable."
+  },
+  {
+    "file_path": "data/sample_app.log",
+    "start_line": 150,
+    "end_line": 180,
+    "status": "anomaly",
+    "explanation": "Memory leak detected. The system tries to allocate too much RAM and throws an OutOfMemory exception."
+  }
+]
