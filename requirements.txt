@@ -1,0 +1,9 @@
+langchain_chroma==1.1.0
+langchain_community==0.4.1
+langchain_core==1.2.18
+langchain_google_genai==4.2.1
+langchain_text_splitters==1.1.1
+langgraph==1.1.0
+pandas==3.0.1
+python-dotenv==1.2.2
+truststore==0.10.4

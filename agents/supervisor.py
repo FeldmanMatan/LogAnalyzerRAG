@@ -9,9 +9,9 @@ from agents.state import AgentState
 from agents.baseline_specialist import baseline_node
 from agents.investigator_agent import investigator_node
 
-def build_team_graph():
+def build_team_graph(memory=None):
     """
-    Constructs the multi-agent workflow graph.
+    Constructs the multi-agent workflow graph with persistent memory.
     
     The flow is sequential:
     START -> Baseline Specialist -> Investigator Agent -> END
@@ -28,6 +28,6 @@ def build_team_graph():
     workflow.add_edge("Baseline_Specialist", "Investigator_Agent")
     workflow.add_edge("Investigator_Agent", END)
 
-    # Compile the graph into an executable application
-    app = workflow.compile()
+    # Compile the graph into an executable application, attaching the checkpointer
+    app = workflow.compile(checkpointer=memory)
     return app

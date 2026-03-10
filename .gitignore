@@ -1,12 +1,26 @@
-# Environments
-.venv/
-venv/
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
 
-# Secrets
+# Virtual Environments
+venv/
+env/
+.venv/
 .env
 
-# Databases
+# Databases & Vector Stores
 chroma_db/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
 
-# Python cache
-__pycache__/
+# IDEs and OS files
+.vscode/
+.idea/
+.DS_Store
+*.swp
