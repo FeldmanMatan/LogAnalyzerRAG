@@ -1,6 +1,10 @@
 import sys
 import os
 import sqlite3
+import warnings
+
+# Suppress specific DeprecationWarning from langgraph
+warnings.filterwarnings("ignore", category=DeprecationWarning, module="langgraph")
 
 # Setup the path to ensure imports work correctly from the root directory
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -8,9 +12,11 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from ai_service import AIService
 from retrieval.retriever import get_standard_logs, get_golden_logs
 from langchain_core.tools import tool
+from retrieval.statistical_tools import analyze_log_statistics
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.prebuilt import create_react_agent
 from ingestion.teaching_engine import teach_single
+from agents.batch_analyzer import analyze_log_file_in_batches
 
 @tool
 def search_standard_logs(query: str) -> str:
@@ -41,7 +47,7 @@ def main():
     llm = ai.get_llm()
 
     # Create the tools list
-    tools = [search_standard_logs, search_golden_logs]
+    tools = [search_standard_logs, search_golden_logs, analyze_log_statistics]
 
     # Create SQLite connection
     conn = sqlite3.connect('memory.db', check_same_thread=False)
@@ -65,6 +71,23 @@ def main():
         if user_input.lower() in ['exit', 'quit']:
             break
 
+        if user_input.strip().lower() == 'analyze all':
+            file_path = input("📂 Enter log file path to analyze: ").strip()
+            chunk_input = input("🔢 Enter chunk size (default 50): ").strip()
+            
+            # Parse chunk size with default fallback
+            try:
+                chunk_size = int(chunk_input) if chunk_input else 50
+            except ValueError:
+                print("Invalid chunk size. Defaulting to 50.")
+                chunk_size = 50
+
+            print(f"\n🚀 Starting Batch Analysis on {file_path}...")
+            summary = analyze_log_file_in_batches(file_path, chunk_size=chunk_size)
+            
+            print(f"\n📊 === EXECUTIVE SUMMARY ===\n{summary}\n===========================\n")
+            continue
+
         if user_input.strip().lower() == 'teach':
             try:
                 file_path = input("📂 Enter log file path: ")
@@ -73,7 +96,13 @@ def main():
                 status = input("🏷️ Enter status (golden/anomaly): ")
                 explanation = input("🧠 Enter your human explanation: ")
 
-                result = teach_single(file_path, start, end, status, explanation)
+                save_stats_input = input("📊 Save to statistics DB too? (y/n): ")
+                save_to_stats = save_stats_input.strip().lower() == 'y'
+                log_type = None
+                if save_to_stats:
+                    log_type = input("📊 Enter log type (e.g., app_logs): ").strip()
+
+                result = teach_single(file_path, start, end, status, explanation, save_to_stats=save_to_stats, log_type=log_type)
                 print(f"\n{result}")
             except ValueError:
                 print("\nError: Please enter valid numbers for start/end lines.")

@@ -1,0 +1,10 @@
+{
+    "app_logs": {
+        "regex": "^(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})\\s+([A-Z]+)\\s+(.*)",
+        "columns": ["log_timestamp", "log_level", "message"]
+    },
+    "network_logs": {
+        "regex": "^(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})\\s+([0-9\\.]+)\\s+(.*)",
+        "columns": ["log_timestamp", "ip_address", "event"]
+    }
+}
