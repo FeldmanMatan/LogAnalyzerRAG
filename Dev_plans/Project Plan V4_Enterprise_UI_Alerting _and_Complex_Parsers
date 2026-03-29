@@ -1,0 +1,39 @@
+Please overwrite the contents of `Dev_plans/Project_Plan_V4.md` with the following comprehensive plan, which includes detailed building blocks, sub-tasks, and planned tests:
+
+# 🗺️ תכנון פרויקט גרסה 4 | Project Plan V4: Enterprise UI, Alerting & Complex Parsers
+
+## 🎯 המטרה הסופית | The Grand Vision
+**HE:** הפיכת המערכת למוצר שלם עם ממשק משתמש גרפי (GUI) מבוסס Streamlit הכולל ויזואליזציה של נתונים, יכולת התראות בזמן אמת לערוצים חיצוניים, ותמיכה בסוגי לוגים מורכבים (JSON, Multi-line).
+**EN:** Transforming the system into a complete product with a Streamlit-based GUI including data visualization, real-time alerting to external channels, and support for complex log formats.
+
+---
+
+## 🧱 אבן בניין 15: ממשק משתמש וויזואליזציה | Building Block 15: GUI & Data Visualization
+**מטרה (Goal):** Transition from CLI to a web-based UI for dashboards, chat, executive reports, and interactive charts.
+- [ ] 15.1 הקמת תשתית Streamlit בסיסית וסרגל צד (Sidebar) להצגת סטטוס מסד הנתונים.
+- [ ] 15.2 שילוב זרימת הסוכנים (LangGraph) לתוך ממשק צ'אט אינטראקטיבי עם שמירת היסטוריה (`st.session_state`).
+- [ ] 15.3 הוספת יכולת העלאת קבצים (File Upload) והפעלת מנגנון Batch Analysis דרך סרגל הצד.
+- [ ] 15.4 ויזואליזציה של נתונים (Data Visualization): הטמעת גרפים אינטראקטיביים להצגת נתונים סטטיסטיים מ-SQLite ישירות בצ'אט או בסרגל הצד.
+
+**🧪 בדיקה מתוכננת (Planned Test):**
+הרצת `Run_LogAnalyzer.bat`, וידוא שהממשק עולה בדפדפן. הרצת חקירה בצ'אט וקבלת תשובה. בנוסף, וידוא שנתוני מסד הנתונים והגרפים מוצגים ללא שגיאות.
+
+---
+
+## 🧱 אבן בניין 16: מערכת התראות אוטומטית | Building Block 16: Automated Alerting System
+**מטרה (Goal):** Notify external channels (Webhooks/Slack/Email) when critical anomalies are detected.
+- [ ] 16.1 יצירת שירות `alerting_service.py` הכולל אינטגרציה גנרית ל-Webhooks (כגון Slack/Teams).
+- [ ] 16.2 שדרוג ה-`Investigator Agent` (או הוספת צומת חדש) כך שיפעיל את שירות ההתראות באופן אוטומטי כאשר מזוהה שגיאה ברמת חומרה 'Critical'.
+
+**🧪 בדיקה מתוכננת (Planned Test):**
+הזנת לוג עם שגיאה המוגדרת כקריטית, הרצת חקירה, ווידוא שהמערכת שולחת בהצלחה בקשת HTTP (Webhook) לערוץ ניסוי (Mock Endpoint) עם פרטי התקלה.
+
+---
+
+## 🧱 אבן בניין 17: פירסור ולוגים מורכבים | Building Block 17: Complex Log Format Support
+**מטרה (Goal):** Expand the Ingestion pipeline to handle JSON logs and Multi-line stack traces (e.g., Java exceptions).
+- [ ] 17.1 עדכון קובץ `log_format.json` והגדרת חוקי פירסור (Regex/JSON) לסוגים מורכבים.
+- [ ] 17.2 שדרוג מנגנון החיתוך ב-`log_processor.py` כך שיזהה ויאגד שגיאות מרובות שורות (Multi-line Stacktraces) לבלוק מידע אחד (Chunk) מבלי לקטוע אותן באמצע.
+
+**🧪 בדיקה מתוכננת (Planned Test):**
+הרצת `db_builder.py` על קובץ לוג המכיל שגיאות Java ארוכות. חקירת השגיאה דרך הצ'אט כדי לוודא שמודל ה-RAG מצליח לשלוף את ה-Stacktrace המלא במקשה אחת ולהסביר אותו, ושהוא נשמר תקין ב-SQLite.
