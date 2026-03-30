@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 from gui_app import LogAnalyzerUI
 import init_stats_db
+from tests.utils.test_logger import logger  # Added our centralized logger
 
 # Real test paths for the Visual E2E
 TEST_SQLITE_DB = os.path.join(os.path.dirname(__file__), "e2e_stats.db")
@@ -65,9 +66,11 @@ def setup_real_data_for_visual_test():
     """
     SDET Fixture: Prepares REAL data and a dummy log file for the Visual UI Robot.
     """
+    logger.info("Setting up real data and environment for Visual E2E Tests...")
+    
     # Create Dummy Log File for Batch/Teach tests
     with open(TEST_DUMMY_LOG, 'w', encoding='utf-8') as f:
-        f.write("2026-01-01 10:00 ERROR Network timeout\n" * 20) # 20 lines of logs
+        f.write("2026-01-01 10:00 ERROR Network timeout\n" * 20)
         
     if os.path.exists(TEST_SQLITE_DB):
         os.remove(TEST_SQLITE_DB)
@@ -95,30 +98,26 @@ def setup_real_data_for_visual_test():
          patch('retrieval.statistical_tools.STATS_DB_PATH', TEST_SQLITE_DB):
         yield
         
-    # Teardown
-    if os.path.exists(TEST_SQLITE_DB):
-        os.remove(TEST_SQLITE_DB)
-    if os.path.exists(TEST_DUMMY_LOG):
-        os.remove(TEST_DUMMY_LOG)
+    logger.info("Tearing down Visual E2E environment...")
+    if os.path.exists(TEST_SQLITE_DB): os.remove(TEST_SQLITE_DB)
+    if os.path.exists(TEST_DUMMY_LOG): os.remove(TEST_DUMMY_LOG)
 
 
 @pytest.mark.skipif("GOOGLE_API_KEY" not in os.environ, reason="Visual E2E requires a valid GOOGLE_API_KEY.")
 class TestVisualE2E:
     """
     Visual End-to-End Test Suite. 
-    Divided into specific functional tests for broad system coverage.
+    Simulates human interactions with the Tkinter GUI.
     """
 
     def type_like_human(self, app, widget, text, speed_ms=0.03):
-        """Helper function to simulate human typing."""
+        """Helper function to simulate human typing for realism."""
         if hasattr(widget, "insert") and "Text" in str(type(widget)):
-            # For CTkTextbox (starts at index "1.0")
             widget.delete("1.0", "end")
             widget.insert("1.0", text)
             app.update()
             time.sleep(speed_ms * len(text))
         else:
-            # For CTkEntry (starts at index 0)
             widget.delete(0, "end")
             for char in text:
                 widget.insert("end", char)
@@ -127,7 +126,7 @@ class TestVisualE2E:
 
     def test_tc_vis_01_chat_flow(self):
         """TC-VIS-01: Visual check of the Investigator Chat."""
-        print("\n[Visual E2E] Running Chat Flow...")
+        logger.info("▶️ TC-VIS-01: Running Visual Chat Flow...")
         with SafeUIQueue() as ui_queue:
             app = LogAnalyzerUI()
             app.update()
@@ -137,6 +136,7 @@ class TestVisualE2E:
             app.update()
             
             test_query = "Check the statistics for 'app_logs'. How many ERROR logs?"
+            logger.debug(f"Simulating human typing: {test_query}")
             self.type_like_human(app, app.chat_frame.input_entry, test_query)
             app.chat_frame.send_message()
             
@@ -144,7 +144,7 @@ class TestVisualE2E:
             success = False
             while time.time() - start_time < 30:
                 app.update() 
-                ui_queue.process() # Safely process background UI updates
+                ui_queue.process() 
                 
                 current_text = app.chat_frame.chat_history.get("1.0", "end")
                 if "DevOps AI is thinking..." not in current_text and len(current_text.strip()) > len(test_query) + 10:
@@ -153,16 +153,21 @@ class TestVisualE2E:
                 time.sleep(0.1) 
                 
             if success:
-                time.sleep(2) # Let human read
+                time.sleep(2) 
             
             final_text = app.chat_frame.chat_history.get("1.0", "end")
             app.destroy() 
-            assert success is True, "AI Chat timed out."
+            
+            assert success is True, "AI Chat timed out (Likely API Rate Limit)."
             assert "2" in final_text or "two" in final_text.lower(), "AI failed to find the 2 errors."
+            logger.info("✅ TC-VIS-01 Passed: Visual Chat Flow successful.")
+            
+        logger.info("Sleeping to cool down API quota...")
+        time.sleep(10)
 
     def test_tc_vis_02_batch_analysis_flow(self):
         """TC-VIS-02: Visual check of the Map-Reduce Batch Analysis."""
-        print("\n[Visual E2E] Running Batch Analysis Flow...")
+        logger.info("▶️ TC-VIS-02: Running Visual Batch Analysis Flow...")
         with SafeUIQueue() as ui_queue:
             app = LogAnalyzerUI()
             app.update()
@@ -172,7 +177,7 @@ class TestVisualE2E:
             app.update()
             time.sleep(0.5)
 
-            # Fill Form
+            logger.debug("Filling Batch Analysis form...")
             self.type_like_human(app, app.batch_frame.file_entry, TEST_DUMMY_LOG)
             app.batch_frame.chunk_entry.delete(0, "end")
             self.type_like_human(app, app.batch_frame.chunk_entry, "10")
@@ -181,7 +186,7 @@ class TestVisualE2E:
             
             start_time = time.time()
             success = False
-            while time.time() - start_time < 45: # Batch takes longer
+            while time.time() - start_time < 45: 
                 app.update()
                 ui_queue.process()
                 
@@ -192,14 +197,18 @@ class TestVisualE2E:
                 time.sleep(0.1)
 
             if success:
-                time.sleep(3) # Let human read the summary
+                time.sleep(3) 
                 
             app.destroy()
             assert success is True, "Batch Analysis timed out."
+            logger.info("✅ TC-VIS-02 Passed: Visual Batch Analysis successful.")
+            
+        logger.info("Sleeping to cool down API quota...")
+        time.sleep(10)
 
     def test_tc_vis_03_teaching_engine_flow(self):
         """TC-VIS-03: Visual check of the Teaching Engine and Dual-Save."""
-        print("\n[Visual E2E] Running Teaching Engine Flow...")
+        logger.info("▶️ TC-VIS-03: Running Visual Teaching Engine Flow...")
         with SafeUIQueue() as ui_queue:
             app = LogAnalyzerUI()
             app.update()
@@ -209,7 +218,7 @@ class TestVisualE2E:
             app.update()
             time.sleep(0.5)
 
-            # Fill Form
+            logger.debug("Filling Teaching Engine form...")
             self.type_like_human(app, app.teach_frame.file_entry, TEST_DUMMY_LOG)
             self.type_like_human(app, app.teach_frame.start_entry, "1")
             self.type_like_human(app, app.teach_frame.end_entry, "5")
@@ -241,5 +250,7 @@ class TestVisualE2E:
                 
             final_status = app.teach_frame.result_label.cget("text")
             app.destroy()
+            
             assert success is True, "Teaching Engine timed out."
             assert "Success" in final_status, f"Teaching Engine failed with error: {final_status}"
+            logger.info("✅ TC-VIS-03 Passed: Visual Teaching Engine flow successful.")

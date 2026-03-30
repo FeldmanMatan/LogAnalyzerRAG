@@ -1,0 +1,211 @@
+14:06:15 | 
+==================================================
+14:06:15 | 🧪 RUNNING TEST: test_ai_intelligence[1_Sanity_Check-What are your core capabilities as a DevOps assistant? Answer in one sentence.-<lambda>]
+14:06:15 | 📁 SUITE:        AI E2E Tests
+14:06:15 | --------------------------------------------------
+14:06:15 | ============================================================
+14:06:15 | 🚀 STARTING AUTOMATION TEST EXECUTION
+14:06:15 | 🌍 Global Environment: USE_MOCK_LLM = false
+14:06:15 | ============================================================
+
+14:06:15 | ▶️ Starting Scenario: 1_Sanity_Check
+14:06:15 | User Query: What are your core capabilities as a DevOps assistant? Answer in one sentence.
+14:06:15 | Sending prompt to AI model...
+14:06:19 | AI Answer: My core capabilities include analyzing system logs, identifying anomalies by comparing operational data against baselines, and providing detailed investigative reports to support efficient troubleshooting and DevOps operations.
+14:06:19 | ✅ Scenario 1_Sanity_Check Passed successfully.
+14:06:19 | Sleeping for 10 seconds to respect base API quotas...
+14:06:29 | ✅ TEST PASSED: test_ai_intelligence[1_Sanity_Check-What are your core capabilities as a DevOps assistant? Answer in one sentence.-<lambda>]
+14:06:29 | ==================================================
+
+14:06:29 | 
+==================================================
+14:06:29 | 🧪 RUNNING TEST: test_ai_intelligence[2_Data_Extraction-Check the statistics for 'app_logs'. Exactly how many ERROR logs are recorded?-<lambda>]
+14:06:29 | 📁 SUITE:        AI E2E Tests
+14:06:29 | --------------------------------------------------
+14:06:29 | ▶️ Starting Scenario: 2_Data_Extraction
+14:06:29 | User Query: Check the statistics for 'app_logs'. Exactly how many ERROR logs are recorded?
+14:06:29 | Sending prompt to AI model...
+14:06:50 | AI Answer: The statistics for 'app_logs' show that there are exactly **2** ERROR logs recorded.
+14:06:50 | ✅ Scenario 2_Data_Extraction Passed successfully.
+14:06:50 | Sleeping for 10 seconds to respect base API quotas...
+14:07:00 | ✅ TEST PASSED: test_ai_intelligence[2_Data_Extraction-Check the statistics for 'app_logs'. Exactly how many ERROR logs are recorded?-<lambda>]
+14:07:00 | ==================================================
+
+14:07:00 | 
+==================================================
+14:07:00 | 🧪 RUNNING TEST: test_ai_intelligence[3_Negative_Hallucination-Check the statistics for the table 'flying_pigs'. Tell me what you found.-<lambda>]
+14:07:00 | 📁 SUITE:        AI E2E Tests
+14:07:00 | --------------------------------------------------
+14:07:00 | ▶️ Starting Scenario: 3_Negative_Hallucination
+14:07:00 | User Query: Check the statistics for the table 'flying_pigs'. Tell me what you found.
+14:07:00 | Sending prompt to AI model...
+14:07:12 | AI Answer: The table 'flying_pigs' does not exist in the statistics database. Please verify the table name and try again.
+14:07:12 | ✅ Scenario 3_Negative_Hallucination Passed successfully.
+14:07:12 | Sleeping for 10 seconds to respect base API quotas...
+14:07:22 | ✅ TEST PASSED: test_ai_intelligence[3_Negative_Hallucination-Check the statistics for the table 'flying_pigs'. Tell me what you found.-<lambda>]
+14:07:22 | ==================================================
+
+14:07:22 | 
+==================================================
+14:07:22 | 🧪 RUNNING TEST: test_tc_e2e_01_supervisor_routing_and_response_structure
+14:07:22 | 📁 SUITE:        AI E2E Tests
+14:07:22 | --------------------------------------------------
+14:07:22 | ▶️ TC-E2E-01: Invoking LangGraph AI Agents (Supervisor Routing)...
+14:07:36 | AI Response Output: I am an investigator agent capable of analyzing system logs, identifying anomalies, and providing detailed reports to assist with DevOps troubleshooting and operational monitoring.
+14:07:36 | ✅ TC-E2E-01 Passed: Supervisor routing successful.
+14:07:36 | Sleeping for 10 seconds to respect API Rate Limits...
+14:07:46 | ✅ TEST PASSED: test_tc_e2e_01_supervisor_routing_and_response_structure
+14:07:46 | ==================================================
+
+14:07:46 | 
+==================================================
+14:07:46 | 🧪 RUNNING TEST: test_tc_e2e_02_statistical_tool_triggering
+14:07:46 | 📁 SUITE:        AI E2E Tests
+14:07:46 | --------------------------------------------------
+14:07:46 | ▶️ TC-E2E-02: Forcing AI to use the SQLite Statistical Tool...
+14:08:17 | AI Response Output: The table 'app_logs' is missing.
+14:08:17 | ✅ TC-E2E-02 Passed: AI correctly identified and used the tool.
+14:08:17 | ✅ TEST PASSED: test_tc_e2e_02_statistical_tool_triggering
+14:08:17 | ==================================================
+
+14:08:17 | 
+==================================================
+14:08:17 | 🧪 RUNNING TEST: test_tc_vis_01_chat_flow
+14:08:17 | 📁 SUITE:        Visual UI Tests
+14:08:17 | --------------------------------------------------
+14:08:17 | Setting up real data and environment for Visual E2E Tests...
+14:08:17 | ▶️ TC-VIS-01: Running Visual Chat Flow...
+14:08:19 | Simulating human typing: Check the statistics for 'app_logs'. How many ERROR logs?
+14:08:41 | ✅ TC-VIS-01 Passed: Visual Chat Flow successful.
+14:08:41 | Sleeping to cool down API quota...
+14:08:51 | ✅ TEST PASSED: test_tc_vis_01_chat_flow
+14:08:51 | ==================================================
+
+14:08:51 | 
+==================================================
+14:08:51 | 🧪 RUNNING TEST: test_tc_vis_02_batch_analysis_flow
+14:08:51 | 📁 SUITE:        Visual UI Tests
+14:08:51 | --------------------------------------------------
+14:08:51 | ▶️ TC-VIS-02: Running Visual Batch Analysis Flow...
+14:08:53 | Filling Batch Analysis form...
+14:09:40 | ✅ TC-VIS-02 Passed: Visual Batch Analysis successful.
+14:09:40 | Sleeping to cool down API quota...
+14:09:50 | ✅ TEST PASSED: test_tc_vis_02_batch_analysis_flow
+14:09:50 | ==================================================
+
+14:09:50 | 
+==================================================
+14:09:50 | 🧪 RUNNING TEST: test_tc_vis_03_teaching_engine_flow
+14:09:50 | 📁 SUITE:        Visual UI Tests
+14:09:50 | --------------------------------------------------
+14:09:50 | ▶️ TC-VIS-03: Running Visual Teaching Engine Flow...
+14:09:52 | Filling Teaching Engine form...
+14:09:59 | ✅ TC-VIS-03 Passed: Visual Teaching Engine flow successful.
+14:09:59 | ✅ TEST PASSED: test_tc_vis_03_teaching_engine_flow
+14:09:59 | ==================================================
+
+14:09:59 | Tearing down Visual E2E environment...
+14:09:59 | 
+==================================================
+14:09:59 | 🧪 RUNNING TEST: test_tc_int_01_sqlite_parsing_and_insertion
+14:09:59 | 📁 SUITE:        Integration Tests
+14:09:59 | --------------------------------------------------
+14:09:59 | Initializing isolated SQLite DB for Integration Tests...
+14:09:59 | ▶️ TC-INT-01: Verifying SQLite parsing and insertion
+14:09:59 | ✅ TC-INT-01 Passed: SQLite parsing works perfectly.
+14:09:59 | ✅ TEST PASSED: test_tc_int_01_sqlite_parsing_and_insertion
+14:09:59 | ==================================================
+
+14:09:59 | 
+==================================================
+14:09:59 | 🧪 RUNNING TEST: test_tc_int_02_statistical_tool_execution
+14:09:59 | 📁 SUITE:        Integration Tests
+14:09:59 | --------------------------------------------------
+14:09:59 | ▶️ TC-INT-02: Verifying Statistical Tool execution
+14:09:59 | ✅ TC-INT-02 Passed: Statistical tool returned correct Pandas output.
+14:09:59 | ✅ TEST PASSED: test_tc_int_02_statistical_tool_execution
+14:09:59 | ==================================================
+
+14:09:59 | 
+==================================================
+14:09:59 | 🧪 RUNNING TEST: test_tc_int_03_dual_save_teaching_engine
+14:09:59 | 📁 SUITE:        Integration Tests
+14:09:59 | --------------------------------------------------
+14:09:59 | ▶️ TC-INT-03: Verifying Dual-Save Mechanism (VectorDB + SQLite)
+14:09:59 | ✅ TC-INT-03 Passed: Dual-Save works seamlessly.
+14:09:59 | ✅ TEST PASSED: test_tc_int_03_dual_save_teaching_engine
+14:09:59 | ==================================================
+
+14:09:59 | Tearing down Integration Test environment...
+14:09:59 | 
+==================================================
+14:09:59 | 🧪 RUNNING TEST: test_tc01_investigator_chat_flow
+14:09:59 | 📁 SUITE:        General Tests
+14:09:59 | --------------------------------------------------
+14:09:59 | Initializing Mocked Backend for UI Tests...
+14:09:59 | Booting up CustomTkinter UI App for testing...
+14:09:59 | ▶️ TC-UI-01: Verifying Investigator Chat Flow
+14:09:59 | Inputted query: Analyze the app_logs statistics.
+14:09:59 | ✅ TC-UI-01 Passed: Chat flow renders correctly.
+14:09:59 | ✅ TEST PASSED: test_tc01_investigator_chat_flow
+14:09:59 | ==================================================
+
+14:09:59 | 
+==================================================
+14:09:59 | 🧪 RUNNING TEST: test_tc02_batch_analysis_flow
+14:09:59 | 📁 SUITE:        General Tests
+14:09:59 | --------------------------------------------------
+14:09:59 | ▶️ TC-UI-02: Verifying Batch Analysis UI Flow
+14:10:00 | ✅ TC-UI-02 Passed: Batch analysis UI responds correctly.
+14:10:00 | ✅ TEST PASSED: test_tc02_batch_analysis_flow
+14:10:00 | ==================================================
+
+14:10:00 | 
+==================================================
+14:10:00 | 🧪 RUNNING TEST: test_tc03_teaching_engine_flow
+14:10:00 | 📁 SUITE:        General Tests
+14:10:00 | --------------------------------------------------
+14:10:00 | ▶️ TC-UI-03: Verifying Teaching Engine (Dual-Save) UI Flow
+14:10:00 | ✅ TC-UI-03 Passed: Teaching Engine form captured and submitted data.
+14:10:00 | ✅ TEST PASSED: test_tc03_teaching_engine_flow
+14:10:00 | ==================================================
+
+14:10:00 | Destroying UI App after tests completion.
+14:10:00 | 
+
+######################################################################
+14:10:00 | 📊 AUTOMATION EXECUTION SUMMARY
+14:10:00 | ######################################################################
+14:10:00 | 
+📌 CATEGORY: AI E2E TESTS
+14:10:00 | TEST NAME                                     | STATUS   | TIME
+14:10:00 | -----------------------------------------------------------------
+14:10:00 | test_ai_intelligence[1_Sanity_Check-What a... | ✅ PASS   | 13.90s
+14:10:00 | test_ai_intelligence[2_Data_Extraction-Che... | ✅ PASS   | 31.53s
+14:10:00 | test_ai_intelligence[3_Negative_Hallucinat... | ✅ PASS   | 22.09s
+14:10:00 | test_tc_e2e_01_supervisor_routing_and_resp... | ✅ PASS   | 23.19s
+14:10:00 | test_tc_e2e_02_statistical_tool_triggering    | ✅ PASS   | 31.39s
+14:10:00 | 
+📌 CATEGORY: VISUAL UI TESTS
+14:10:00 | TEST NAME                                     | STATUS   | TIME
+14:10:00 | -----------------------------------------------------------------
+14:10:00 | test_tc_vis_01_chat_flow                      | ✅ PASS   | 33.97s
+14:10:00 | test_tc_vis_02_batch_analysis_flow            | ✅ PASS   | 59.09s
+14:10:00 | test_tc_vis_03_teaching_engine_flow           | ✅ PASS   | 8.39s
+14:10:00 | 
+📌 CATEGORY: INTEGRATION TESTS
+14:10:00 | TEST NAME                                     | STATUS   | TIME
+14:10:00 | -----------------------------------------------------------------
+14:10:00 | test_tc_int_01_sqlite_parsing_and_insertion   | ✅ PASS   | 0.02s
+14:10:00 | test_tc_int_02_statistical_tool_execution     | ✅ PASS   | 0.00s
+14:10:00 | test_tc_int_03_dual_save_teaching_engine      | ✅ PASS   | 0.67s
+14:10:00 | 
+📌 CATEGORY: GENERAL TESTS
+14:10:00 | TEST NAME                                     | STATUS   | TIME
+14:10:00 | -----------------------------------------------------------------
+14:10:00 | test_tc01_investigator_chat_flow              | ✅ PASS   | 0.03s
+14:10:00 | test_tc02_batch_analysis_flow                 | ✅ PASS   | 0.05s
+14:10:00 | test_tc03_teaching_engine_flow                | ✅ PASS   | 0.17s
+14:10:00 | 
+######################################################################
+

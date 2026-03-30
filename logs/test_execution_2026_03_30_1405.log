@@ -1,0 +1,32 @@
+14:05:14 | 
+==================================================
+14:05:14 | 🧪 RUNNING TEST: test_tc01_investigator_chat_flow
+14:05:14 | 📁 SUITE:        General Tests
+14:05:14 | --------------------------------------------------
+14:05:14 | ============================================================
+14:05:14 | 🚀 STARTING AUTOMATION TEST EXECUTION
+14:05:14 | 🌍 Global Environment: USE_MOCK_LLM = false
+14:05:14 | ============================================================
+
+14:05:14 | Initializing Mocked Backend for UI Tests...
+14:05:14 | Booting up CustomTkinter UI App for testing...
+14:05:16 | ▶️ TC-UI-01: Verifying Investigator Chat Flow
+14:05:16 | Inputted query: Analyze the app_logs statistics.
+14:05:16 | ✅ TC-UI-01 Passed: Chat flow renders correctly.
+14:05:16 | ✅ TEST PASSED: test_tc01_investigator_chat_flow
+14:05:16 | ==================================================
+
+14:05:16 | Destroying UI App after tests completion.
+14:05:17 | 
+
+######################################################################
+14:05:17 | 📊 AUTOMATION EXECUTION SUMMARY
+14:05:17 | ######################################################################
+14:05:17 | 
+📌 CATEGORY: GENERAL TESTS
+14:05:17 | TEST NAME                                     | STATUS   | TIME
+14:05:17 | -----------------------------------------------------------------
+14:05:17 | test_tc01_investigator_chat_flow              | ✅ PASS   | 0.05s
+14:05:17 | 
+######################################################################
+
