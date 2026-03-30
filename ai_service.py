@@ -64,7 +64,7 @@ class AIService:
         """Returns the configured LLM based on the provider."""
         if self.provider == 'gemini':
             return ChatGoogleGenerativeAI(
-                model="gemini-2.5-flash",
+                model="gemini-3.1-flash-lite-preview", #Gemini 3.1 Flash Lite
                 google_api_key=self.api_key,
                 temperature=0
             )
